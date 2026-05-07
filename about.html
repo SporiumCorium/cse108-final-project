@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Solis Creek Police Department</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f0f0ee;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: #222;
+    min-height: 100vh;
+  }
+
+  .emerg {
+    background: #b03a2e;
+    text-align: center;
+    padding: 7px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: white;
+  }
+
+  header {
+    background: #1a2535;
+    border-bottom: 3px solid #8a6f2e;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  header svg { width: 52px; height: 52px; flex-shrink: 0; }
+
+  .hd-name { font-size: 18px; font-weight: 600; letter-spacing: 0.05em; color: #d4b96a; text-transform: uppercase; }
+  .hd-sub { font-size: 10px; color: #7a8a9a; letter-spacing: 0.1em; margin-top: 3px; }
+  .hd-motto { font-size: 11px; font-style: italic; font-weight: 300; color: #8a6f2e; margin-top: 4px; }
+
+  nav {
+    background: #243246;
+    border-bottom: 1px solid #8a6f2e;
+    display: flex;
+  }
+  nav a {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #8a9ab0; text-decoration: none;
+    padding: 10px 20px;
+    border-right: 1px solid rgba(138,111,46,0.2);
+    transition: color 0.15s, background 0.15s;
+  }
+  nav a:hover, nav a.active { color: #d4b96a; background: rgba(212,185,106,0.06); }
+  nav a:first-child { border-left: 1px solid rgba(138,111,46,0.2); }
+  .nav-db {
+    margin-left: auto;
+    font-family: 'Source Code Pro', monospace !important;
+    font-size: 10px !important;
+    color: #8a6f2e !important;
+  }
+
+  /* Layout */
+  .page {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 24px;
+  }
+
+  /* Page title */
+  .page-title {
+    background: #1a2535;
+    border-left: 3px solid #d4b96a;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+  }
+  .page-title h1 { font-size: 18px; font-weight: 600; color: #d4b96a; letter-spacing: 0.06em; text-transform: uppercase; }
+  .page-title p { font-family: 'Source Code Pro', monospace; font-size: 9px; color: #5a6a7a; margin-top: 4px; letter-spacing: 0.08em; }
+
+  /* Prose sections */
+  .section {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+  }
+
+  .section h2 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8a6f2e;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 14px;
+  }
+
+  .section p {
+    font-size: 13px;
+    color: #3a3a3a;
+    line-height: 1.75;
+    margin-bottom: 12px;
+  }
+  .section p:last-child { margin-bottom: 0; }
+
+  /* Invisible text puzzle */
+  .hidden-clue {
+    color: white;
+    user-select: text;
+    cursor: text;
+  }
+
+  .hidden-clue-2 {
+    color: #f0f0ee; /* matches body bg */
+    user-select: text;
+    cursor: text;
+  }
+
+  /* Callout */
+  .callout {
+    background: #f8f5ef;
+    border-left: 3px solid #8a6f2e;
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 12px;
+    font-style: italic;
+    color: #4a4a4a;
+    line-height: 1.6;
+  }
+  .callout cite { display: block; font-size: 10px; font-style: normal; color: #8a6f2e; margin-top: 6px; }
+
+  /* Personnel table */
+  .personnel-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  .personnel-table th {
+    background: #1a2535;
+    color: #d4b96a;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 7px 10px;
+    text-align: left;
+    border: 1px solid #8a6f2e;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+  }
+  .personnel-table td {
+    padding: 7px 10px;
+    border: 1px solid #ddd;
+    color: #333;
+  }
+  .personnel-table tr:nth-child(even) td { background: #fafaf8; }
+
+  /* Redacted */
+  .redacted {
+    background: #111;
+    color: #111;
+    padding: 1px 5px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    user-select: all;
+    border-radius: 2px;
+    display: inline;
+  }
+
+  /* Sidebar */
+  .sidebar-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-top: 3px solid #8a6f2e;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+  .sidebar-card h3 {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #8a6f2e;
+    margin-bottom: 10px;
+  }
+  .slink {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid #eee;
+    text-decoration: none;
+    font-size: 12px;
+    color: #333;
+    transition: color 0.15s;
+  }
+  .slink:last-child { border-bottom: none; }
+  .slink:hover { color: #8a6f2e; }
+  .slink::before { content: '›'; font-size: 14px; color: #8a6f2e; }
+
+  .glance {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    line-height: 2;
+    color: #444;
+  }
+
+  .access-notice {
+    border-top-color: #b03a2e !important;
+    background: #fff8f8 !important;
+  }
+  .access-notice h3 { color: #b03a2e !important; }
+  .access-notice p { font-size: 11px; color: #6a4040; line-height: 1.7; }
+
+  /* Footer */
+  footer {
+    background: #1a2535;
+    border-top: 2px solid #8a6f2e;
+    padding: 14px 24px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  footer span { font-family: 'Source Code Pro', monospace; font-size: 9px; color: #5a6a7a; letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+
+<div class="emerg">EMERGENCY: 000 &nbsp;|&nbsp; NON-EMERGENCY: (000) 000-0000</div>
+
+<header>
+  <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+    <path d="M28 4 L46 10 L50 28 L28 52 L6 28 L10 10 Z" fill="none" stroke="#d4b96a" stroke-width="1.5"/>
+    <circle cx="28" cy="28" r="14" fill="none" stroke="#8a6f2e" stroke-width="1" stroke-dasharray="3 2"/>
+    <polygon points="28,10 30,19 39,19 32,24 34,33 28,28 22,33 24,24 17,19 26,19" fill="none" stroke="#d4b96a" stroke-width="1.2"/>
+    <circle cx="28" cy="28" r="3" fill="#d4b96a" opacity="0.7"/>
+  </svg>
+  <div>
+    <div class="hd-name">Solis Creek Police Department</div>
+    <div class="hd-sub">City of Solis Creek · San Joaquin Valley, California</div>
+    <div class="hd-motto">"Protecting Our Community, Upholding the Peace"</div>
+  </div>
+</header>
+
+<nav>
+  <a href="homepage.html">Home</a>
+  <a href="about.html" class="active">About</a>
+  <a href="contact.html">Contact Us</a>
+  <a href="login.html" class="nav-db">[ Login ]</a>
+</nav>
+
+<div class="page">
+  <div>
+    <div class="page-title">
+      <h1>About the Department</h1>
+      <p>SCPD-WEB/ABOUT · LAST REVIEWED: 02/11/2026</p>
+    </div>
+
+    <!-- History -->
+    <div class="section">
+      <h2>Our History</h2>
+      <p>
+        The Solis Creek Police Department was formally established in 1947 following the incorporation of the City of Solis Creek. Beginning with a staff of just nine officers and a single patrol vehicle, the department has grown steadily alongside the community it serves. Today, SCPD employs over 140 sworn personnel and 60 civilian staff across five specialized divisions.
+      </p>
+      <p>
+        For nearly eighty years, the department has remained committed to its founding principle: that effective law enforcement is built on the trust and cooperation of the public. <span class="hidden-clue">username: officer_hartwell</span> Community policing has been at the heart of SCPD's philosophy since the 1980s, when Chief Alicia Monroe restructured patrol operations to prioritize neighborhood engagement.
+      </p>
+      <p>
+        In 2003, the department completed construction of its current headquarters at 810 Halcyon Drive, a facility designed with public accessibility and departmental transparency in mind.
+      </p>
+    </div>
+
+    <!-- Mission -->
+    <div class="section">
+      <h2>Mission &amp; Values</h2>
+      <p>
+        The Solis Creek Police Department is committed to delivering professional, impartial, and compassionate law enforcement services to all residents of Solis Creek. Our officers are guided by five core values: Integrity, Accountability, Respect, Service, and Transparency.
+      </p>
+      <div class="callout">
+        "We do not merely enforce the law — we are part of this community. Every interaction is an opportunity to build trust, and we take that responsibility seriously."
+        <cite>— Chief Raymond Harlow, 2024 Annual Address</cite>
+      </div>
+      <p>
+        Officers undergo continuous training in de-escalation techniques, mental health crisis response, and cultural competency. All sworn personnel are required to complete annual ethics certification and a biennial review of use-of-force policies. <span class="hidden-clue">password: sycamore_vine_94</span> Internal Affairs maintains full independence from the chain of command and reports directly to the City Manager's office.
+      </p>
+    </div>
+
+    <!-- Leadership -->
+    <div class="section">
+      <h2>Department Leadership</h2>
+      <p>The department is organized under the Office of the Chief of Police, with four deputy chiefs overseeing Field Operations, Investigations, Support Services, and Administrative divisions.</p>
+      <table class="personnel-table">
+        <thead>
+          <tr><th>Name</th><th>Title</th><th>Division</th><th>Badge #</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Raymond Harlow</td><td>Chief of Police</td><td>Office of the Chief</td><td>001</td></tr>
+          <tr><td>Sandra Okafor</td><td>Deputy Chief</td><td>Field Operations</td><td>004</td></tr>
+          <tr><td>Marcus Delgado</td><td>Deputy Chief</td><td>Investigations</td><td>007</td></tr>
+          <tr><td>Patricia Wu</td><td>Deputy Chief</td><td>Support Services</td><td>009</td></tr>
+          <tr>
+            <td><span class="redacted">E. Calloway</span></td>
+            <td>Records &amp; Database Admin</td>
+            <td>Administrative</td>
+            <td><span class="redacted">031</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Divisions -->
+    <div class="section">
+      <h2>Divisions &amp; Units</h2>
+      <p><strong>Field Operations Division</strong> encompasses all uniformed patrol activity, traffic enforcement, and the department's canine unit. Patrol officers are assigned to one of three geographic sectors covering the full 28 square miles of incorporated Solis Creek.</p>
+      <p><strong>Investigations Division</strong> handles all felony casework, including homicide, robbery, sex crimes, and narcotics. <span class="hidden-clue-2">admin_login: chief_harlow_001</span> The division operates a joint task force with the Merced County Sheriff's Office for cross-jurisdictional investigations.</p>
+      <p><strong>Support Services Division</strong> oversees the department's records management system, fleet maintenance, and dispatch center. Access to the Records &amp; Data Division is restricted to credentialed personnel only.</p>
+      <p><strong>Administrative Division</strong> manages finances, human resources, and public affairs. The division also coordinates the department's database infrastructure, ensuring that sensitive files and personnel records remain secure.</p>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div>
+    <div class="sidebar-card">
+      <h3>On This Page</h3>
+      <a href="#" class="slink">Our History</a>
+      <a href="#" class="slink">Mission &amp; Values</a>
+      <a href="#" class="slink">Leadership</a>
+      <a href="#" class="slink">Divisions &amp; Units</a>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>At a Glance</h3>
+      <div class="glance">
+        Founded: 1947<br>
+        Officers: 142<br>
+        Civilians: 61<br>
+        Divisions: 4<br>
+        Sq. Miles: 28.4<br>
+        Pop. Served: ~68,000
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>Related</h3>
+      <a href="homepage.html" class="slink">Department Home</a>
+      <a href="contact.html" class="slink">Contact Us</a>
+      <a href="login.html" class="slink" style="color:#8a6f2e">Database Access</a>
+    </div>
+
+    <div class="sidebar-card access-notice">
+      <h3>⚠ Access Notice</h3>
+      <p>Certain personnel records and case documents are restricted to authorized database users only. Unauthorized access attempts are logged and may result in disciplinary or legal action.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 SOLIS CREEK POLICE DEPARTMENT</span>
+  <span>LAST UPDATED: 04/28/2026</span>
+</footer>
+
+</body>
+</html>

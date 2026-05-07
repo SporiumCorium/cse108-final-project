@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solis Creek PD — Database Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f0f0ee;
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .card {
+    background: white;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-width: 380px;
+  }
+
+  .card-header {
+    background: #1a2535;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .card-header svg { width: 54px; height: 54px; }
+
+  .dept-name {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #d4b96a;
+  }
+
+  .dept-sub {
+    font-size: 10px;
+    color: #7a8a9a;
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+  }
+
+  .card-body { padding: 28px 24px; }
+
+  .form-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .field { margin-bottom: 14px; }
+
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #555;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #bbb;
+    background: #fafafa;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 13px;
+    color: #222;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  input:focus { border-color: #1a2535; background: white; }
+
+  .login-btn {
+    width: 100%;
+    margin-top: 18px;
+    padding: 10px;
+    background: #1a2535;
+    color: #d4b96a;
+    border: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .login-btn:hover { background: #243246; }
+  .login-btn:disabled { opacity: 0.6; cursor: default; }
+
+  .error-msg {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    color: #b03a2e;
+    margin-top: 10px;
+    min-height: 16px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .error-msg.show { opacity: 1; }
+
+  .card-footer {
+    border-top: 1px solid #e8e8e8;
+    padding: 9px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fafafa;
+  }
+
+  .status-text {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9px;
+    color: #aaa;
+  }
+
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #4caf50;
+    animation: blink 2s infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <path d="M28 4 L46 10 L50 28 L28 52 L6 28 L10 10 Z" fill="none" stroke="#d4b96a" stroke-width="1.5"/>
+      <circle cx="28" cy="28" r="14" fill="none" stroke="#8a6f2e" stroke-width="1" stroke-dasharray="3 2"/>
+      <polygon points="28,10 30,19 39,19 32,24 34,33 28,28 22,33 24,24 17,19 26,19" fill="none" stroke="#d4b96a" stroke-width="1.2"/>
+      <circle cx="28" cy="28" r="3" fill="#d4b96a" opacity="0.7"/>
+    </svg>
+    <div>
+      <div class="dept-name">Solis Creek Police Dept.</div>
+      <div class="dept-sub">Records &amp; Data Division — Secure Access</div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="form-title">Personnel Login</div>
+    <div class="field">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter username" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="••••••••">
+    </div>
+    <div id="error-msg" class="error-msg">ACCESS DENIED — Invalid credentials</div>
+    <button class="login-btn" id="login-btn" onclick="attemptLogin()">Log In</button>
+  </div>
+
+  <div class="card-footer">
+    <span class="status-text" id="clock">00:00:00</span>
+    <div class="status-dot"></div>
+  </div>
+</div>
+
+<script>
+  setInterval(() => {
+    document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US',{hour12:false});
+  }, 1000);
+
+  function attemptLogin() {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value.trim();
+    const err = document.getElementById('error-msg');
+    const btn = document.getElementById('login-btn');
+    if (!u || !p) { err.textContent = 'Please fill in all fields.'; err.classList.add('show'); return; }
+    btn.textContent = 'Verifying...'; btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = 'Log In'; btn.disabled = false;
+      err.textContent = 'ACCESS DENIED — Invalid credentials';
+      err.classList.add('show');
+    }, 1100);
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Enter') attemptLogin(); });
+
+  if (new URLSearchParams(location.search).get('state') === 'sinister') {
+    document.body.style.background = '#111';
+    document.querySelector('.card').style.borderColor = '#333';
+    document.querySelector('.form-title').textContent = 'Access Revoked';
+    document.querySelector('.dept-sub').textContent = 'no one will ever believe you';
+  }
+</script>
+</body>
+</html>
