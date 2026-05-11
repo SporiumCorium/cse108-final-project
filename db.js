@@ -3,6 +3,10 @@ const sqlite3 = require('sqlite3').verbose();
 
 const DB_PATH = path.join(__dirname, 'database.sqlite');
 
+/** Sole authorized database account (plain text matches server login check). */
+const SOLE_USERNAME = 'Calloway7895621';
+const SOLE_PASSWORD = 'L3V1SD135';
+
 const db = new sqlite3.Database(DB_PATH, (err) => {
   if (err) {
     console.error('Failed to open SQLite database:', err);
@@ -42,27 +46,45 @@ db.serialize(() => {
     }
   );
 
-  // Seed a default user for testing if none exist.
-  db.get('SELECT COUNT(*) AS count FROM users', (err, row) => {
-    if (err) {
-      console.error('Error counting users:', err);
-      return;
-    }
-    if (row && row.count === 0) {
-      const stmt = db.prepare(
-        'INSERT INTO users (username, password) VALUES (?, ?)'
-      );
-      // NOTE: For a real app, store password hashes instead of plain text.
-      stmt.run('admin', 'password123', (insertErr) => {
+  // Ensure exactly one authorized row (remove old seeds / extra accounts).
+  db.get(
+    'SELECT id FROM users WHERE username = ? AND password = ?',
+    [SOLE_USERNAME, SOLE_PASSWORD],
+    (selErr, match) => {
+      if (selErr) {
+        console.error('Error checking users table:', selErr);
+        return;
+      }
+      const afterTrim = (insertErr) => {
         if (insertErr) {
-          console.error('Error seeding default user:', insertErr);
+          console.error('Error seeding sole user:', insertErr);
         } else {
-          console.log('Seeded default user: admin / password123');
+          console.log('Database user configured (single account).');
         }
+      };
+      if (match) {
+        db.run(
+          'DELETE FROM users WHERE username != ?',
+          [SOLE_USERNAME],
+          (delErr) => {
+            if (delErr) console.error('Error removing extra users:', delErr);
+          }
+        );
+        return;
+      }
+      db.run('DELETE FROM users', (delErr) => {
+        if (delErr) {
+          console.error('Error clearing users table:', delErr);
+          return;
+        }
+        db.run(
+          'INSERT INTO users (username, password) VALUES (?, ?)',
+          [SOLE_USERNAME, SOLE_PASSWORD],
+          afterTrim
+        );
       });
-      stmt.finalize();
     }
-  });
+  );
 });
 
 module.exports = db;
