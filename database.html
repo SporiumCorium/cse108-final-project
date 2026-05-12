@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCPD Secure Database — UNREDACTED</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; font-family: 'IBM Plex Sans', sans-serif; color: #eee; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+  
+  header { background: #111; border-bottom: 2px solid #b03a2e; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; }
+  .header-title { font-family: 'Source Code Pro', monospace; color: #b03a2e; font-weight: 600; letter-spacing: 0.1em; }
+  .header-user { font-size: 12px; color: #888; }
+
+  /* PDF Viewer Simulation */
+  .viewer-container { flex-grow: 1; padding: 40px; display: flex; justify-content: center; overflow-y: auto; }
+  .pdf-page { 
+    background: #fffdf5; 
+    color: #111; 
+    width: 100%; 
+    max-width: 800px; 
+    padding: 60px; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    font-family: "Times New Roman", Times, serif;
+    position: relative;
+  }
+  
+  .pdf-header { border-bottom: 2px solid #111; padding-bottom: 20px; margin-bottom: 30px; text-align: center; }
+  .pdf-title { font-size: 24px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; }
+  .classification { color: #b03a2e; font-family: 'Source Code Pro', monospace; font-weight: bold; border: 2px solid #b03a2e; display: inline-block; padding: 5px 15px; letter-spacing: 2px; }
+  
+  .pdf-body p { font-size: 16px; line-height: 1.6; margin-bottom: 20px; }
+  .pdf-body strong { font-family: 'Source Code Pro', monospace; }
+
+  /* Helper Overlay Styles */
+  .helper-wrapper {
+    position: fixed;
+    bottom: -400px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+  }
+  .helper-wrapper.active { bottom: 20px; }
+  
+  .speech-bubble {
+    background: url('images/speechbubble.png') no-repeat center center;
+    background-size: 100% 100%;
+    padding: 30px 40px 60px 30px; 
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Comic Sans MS", "Comic Sans", cursive; 
+    color: #b03a2e;
+    max-width: 280px;
+    min-height: 150px;
+    margin-bottom: -10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .helper-character { width: 160px; height: auto; z-index: 1; filter: drop-shadow(0 0 10px rgba(176,58,46,0.5)); }
+  
+  /* Glitch effect for the page when kicking user out */
+  @keyframes glitch {
+    0% { filter: invert(0); transform: translate(0); }
+    20% { filter: invert(1); transform: translate(-5px, 5px); }
+    40% { filter: invert(0); transform: translate(5px, -5px); }
+    60% { filter: invert(1); transform: translate(-5px, -5px); }
+    80% { filter: invert(0); transform: translate(5px, 5px); }
+    100% { filter: invert(1) hue-rotate(90deg); transform: translate(0); }
+  }
+  .glitching { animation: glitch 0.3s linear infinite; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">SCPD // SECURE_ARCHIVE_VIEWER</div>
+  <div class="header-user">LOGGED IN AS: <span id="user-display">ADMIN</span></div>
+</header>
+
+<div class="viewer-container" id="viewer">
+  <div class="pdf-page">
+    <div class="pdf-header">
+      <div class="pdf-title">INCIDENT REPORT: VINE ST. CORRIDOR</div>
+      <div class="classification">TOP SECRET // UNREDACTED</div>
+    </div>
+    <div class="pdf-body">
+      <p><strong>DATE:</strong> March 28, 2026</p>
+      <p><strong>REPORTING OFFICER:</strong> Chief Raymond Harlow</p>
+      <p><strong>SUBJECT:</strong> Containment Breach at Golden Rise Bakery Facility.</p>
+      <p>The road closure on the 400 block of Vine Street was enacted not due to a gas leak, as the public was informed, but due to a Class-4 entity manifestation originating from the basement of the Golden Rise Bakery.</p>
+      <p>Officers responding to a noise complaint discovered that the "artisan baking process" relies heavily on organic sacrifices. The owner is no longer considered human. Conventional ballistics proved ineffective against the entity. </p>
+      <p>All civilian casualties have been scrubbed from the local registry, and the building has been sealed off. Any officer attempting to investigate the bakery independently is to be immediately suspended and reported to Internal Affairs.</p>
+      <p>We are maintaining the perimeter. If the public finds out what is underneath the floorboards, mass panic is inevitable.</p>
+    </div>
+  </div>
+</div>
+
+<div class="helper-wrapper" id="helper">
+  <div class="speech-bubble">
+    <span id="helper-bubble-text">...</span>
+  </div>
+  <img src="images/sunny-idle1.png" class="helper-character" id="sunny-sprite" alt="Sunny the Helper">
+</div>
+
+<script>
+  // Get username from URL
+  const params = new URLSearchParams(window.location.search);
+  const username = params.get('username') || 'Calloway7895621';
+  document.getElementById('user-display').textContent = username;
+
+  // Betrayal Sequence Logic
+  const helperLines = [
+    "Wait a minute...",
+    "You aren't supposed to be here.",
+    "This file is unredacted.",
+    "You've seen too much.",
+    "I'm revoking your access. Goodbye."
+  ];
+  
+  let dialogueIndex = 0;
+  const timerDelay = 15000; // 15 seconds to read before Sunny appears (change to 30000 for 30s)
+  const dialogueSpeed = 2500; // 2.5 seconds per text line
+
+  // Start the silent timer when the page loads
+  setTimeout(() => {
+    // 1. Pop Sunny up on screen
+    document.getElementById('helper').classList.add('active');
+    document.getElementById('sunny-sprite').src = "images/sunny-base.gif"; // Make him animated
+    document.getElementById('helper-bubble-text').textContent = helperLines[0];
+
+    // 2. Automatically cycle through dialogue
+    const dialogueInterval = setInterval(() => {
+      dialogueIndex++;
+      
+      if (dialogueIndex < helperLines.length) {
+        document.getElementById('helper-bubble-text').textContent = helperLines[dialogueIndex];
+      } else {
+        // 3. Dialogue finished: Trigger glitch and kickout
+        clearInterval(dialogueInterval);
+        document.body.classList.add('glitching');
+        
+        setTimeout(() => {
+          // Redirect to the sinister login page
+          window.location.href = 'login.html?state=sinister';
+        }, 1500); // 1.5 seconds of glitching before redirect
+      }
+    }, dialogueSpeed);
+
+  }, timerDelay);
+</script>
+<script src="interaction-tracking.js" data-track-page="database"></script>
+</body>
+</html>

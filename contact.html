@@ -6,7 +6,6 @@
 <title>Contact Us — Solis Creek Police Department</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <style>
-  /* Base styles to match the rest of the site */
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: #f0f0ee; font-family: 'IBM Plex Sans', sans-serif; color: #222; min-height: 100vh; }
   .emerg { background: #b03a2e; text-align: center; padding: 7px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: white; }
@@ -58,15 +57,15 @@
   .key-btn {
     width: 50px;
     height: 50px;
-    background: #243246;
-    border: 1px solid rgba(212, 185, 106, 0.4);
-    border-radius: 4px;
+    background: url('images/keybadbutton.png') no-repeat center center;
+    background-size: 100% 100%;
+    border: none;
     cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+    transition: filter 0.15s;
+    outline: none;
   }
-  .key-btn:hover { background: #2c3e55; border-color: #d4b96a; }
-  .key-btn:active { background: #d4b96a; }
+  .key-btn:hover { filter: brightness(1.2); }
+  .key-btn:active { filter: brightness(0.7); }
 
   footer { background: #1a2535; border-top: 2px solid #8a6f2e; padding: 14px 24px; margin-top: 10px; display: flex; justify-content: space-between; }
   footer span { font-family: 'Source Code Pro', monospace; font-size: 9px; color: #5a6a7a; letter-spacing: 0.08em; }
@@ -151,16 +150,13 @@
   function pressKey(val) {
     currentInput.push(val);
     
-    // Check if the input matches the secret sequence so far
     for (let i = 0; i < currentInput.length; i++) {
       if (currentInput[i] !== secretSequence[i]) {
-        // Mistake made, silently reset the sequence
         currentInput = []; 
         return;
       }
     }
     
-    // If the full correct sequence is entered
     if (currentInput.length === secretSequence.length) {
       window.location.href = "bakery.html"; 
     }

@@ -31,7 +31,7 @@
             userId: String(data.userId || ''),
             username: data.username || ''
           });
-          window.location.href = 'homepage.html?' + params.toString();
+          window.location.href = 'database.html?' + params.toString();
         });
       })
       .catch(function (error) {
