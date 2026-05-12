@@ -67,6 +67,61 @@
   .key-btn:hover { filter: brightness(1.2); }
   .key-btn:active { filter: brightness(0.7); }
 
+  /* Success popup after correct keypad entry */
+  .keypad-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+  .keypad-modal.open {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .keypad-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    cursor: pointer;
+  }
+  .keypad-modal-box {
+    position: relative;
+    background: #fff;
+    border: 2px solid #8a6f2e;
+    padding: 28px 36px 32px;
+    max-width: 92vw;
+    box-shadow: 0 14px 48px rgba(0, 0, 0, 0.38);
+  }
+  .keypad-modal-close {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: #5a5a5a;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .keypad-modal-close:hover { background: #eee; color: #222; }
+  .keypad-modal-img {
+    display: block;
+    max-width: min(300px, 80vw);
+    height: auto;
+    margin: 0 auto;
+  }
+
   footer { background: #1a2535; border-top: 2px solid #8a6f2e; padding: 14px 24px; margin-top: 10px; display: flex; justify-content: space-between; }
   footer span { font-family: 'Source Code Pro', monospace; font-size: 9px; color: #5a6a7a; letter-spacing: 0.08em; }
 </style>
@@ -142,25 +197,51 @@
   <span>LAST UPDATED: 04/28/2026</span>
 </footer>
 
+<div id="keypad-success-modal" class="keypad-modal" aria-hidden="true">
+  <div class="keypad-modal-backdrop" onclick="closeKeypadSuccessModal()"></div>
+  <div class="keypad-modal-box" role="dialog" aria-modal="true" aria-label="Access granted">
+    <button type="button" class="keypad-modal-close" onclick="closeKeypadSuccessModal()" aria-label="Close">&times;</button>
+    <img class="keypad-modal-img" src="images/soliscreekpolicelogo.png" alt="Solis Creek Police Department emblem">
+  </div>
+</div>
+
 <script>
-  // Sequence matches the clue from homepage slide 3: "7 · 2 · 9 · 4"
-  const secretSequence = [7, 2, 9, 4];
+  // Grid positions 1–9: top row 1–3, middle 4–6, bottom 7–9. Code 7-8-9-5-6-2-1.
+  // 1  2  3
+  // 4  5  6
+  // 7  8  9
+  const secretSequence = [7, 8, 9, 5, 6, 2, 1];
   let currentInput = [];
 
   function pressKey(val) {
     currentInput.push(val);
-    
     for (let i = 0; i < currentInput.length; i++) {
       if (currentInput[i] !== secretSequence[i]) {
-        currentInput = []; 
+        currentInput = [];
         return;
       }
     }
-    
     if (currentInput.length === secretSequence.length) {
-      window.location.href = "bakery.html"; 
+      currentInput = [];
+      openKeypadSuccessModal();
     }
   }
+
+  function openKeypadSuccessModal() {
+    var m = document.getElementById('keypad-success-modal');
+    m.classList.add('open');
+    m.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeKeypadSuccessModal() {
+    var m = document.getElementById('keypad-success-modal');
+    m.classList.remove('open');
+    m.setAttribute('aria-hidden', 'true');
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeKeypadSuccessModal();
+  });
 </script>
 <script src="interaction-tracking.js" data-track-page="contact"></script>
 </body>
