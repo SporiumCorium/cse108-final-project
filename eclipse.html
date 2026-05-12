@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — Solis Creek Police Department — ◎</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  /* Base styles to match the rest of the site */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f0f0ee; font-family: 'IBM Plex Sans', sans-serif; color: #222; min-height: 100vh; }
+  .emerg { background: #b03a2e; text-align: center; padding: 7px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: white; }
+  header { background: #1a2535; border-bottom: 3px solid #8a6f2e; padding: 16px 24px; display: flex; align-items: center; gap: 16px; }
+  header svg { width: 52px; height: 52px; flex-shrink: 0; }
+  .hd-name { font-size: 18px; font-weight: 600; letter-spacing: 0.05em; color: #d4b96a; text-transform: uppercase; }
+  .hd-sub { font-size: 10px; color: #7a8a9a; letter-spacing: 0.1em; margin-top: 3px; }
+  .hd-motto { font-size: 11px; font-style: italic; font-weight: 300; color: #8a6f2e; margin-top: 4px; }
+  
+  nav { background: #243246; border-bottom: 1px solid #8a6f2e; display: flex; }
+  nav a { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #8a9ab0; text-decoration: none; padding: 10px 20px; border-right: 1px solid rgba(138,111,46,0.2); transition: color 0.15s, background 0.15s; }
+  nav a:hover, nav a.active { color: #d4b96a; background: rgba(212,185,106,0.06); }
+  nav a:first-child { border-left: 1px solid rgba(138,111,46,0.2); }
+  .nav-db { margin-left: auto; font-family: 'Source Code Pro', monospace !important; font-size: 10px !important; color: #8a6f2e !important; }
+
+  .page { max-width: 940px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 1fr 300px; gap: 24px; }
+  
+  .page-title { background: #1a2535; border-left: 3px solid #d4b96a; padding: 12px 16px; margin-bottom: 20px; }
+  .page-title h1 { font-size: 18px; font-weight: 600; color: #d4b96a; letter-spacing: 0.06em; text-transform: uppercase; }
+  
+  .section { background: white; border: 1px solid #ddd; padding: 22px 24px; margin-bottom: 18px; }
+  .section h2 { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6f2e; padding-bottom: 8px; border-bottom: 1px solid #eee; margin-bottom: 14px; }
+  .section p { font-size: 13px; color: #3a3a3a; line-height: 1.75; margin-bottom: 12px; }
+
+  /* Keypad Puzzle Styles */
+  .secure-entry-panel {
+    background: #1a2535;
+    padding: 24px;
+    border: 2px solid #8a6f2e;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  .secure-entry-title {
+    color: #d4b96a;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .keypad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 50px);
+    gap: 12px;
+  }
+  .key-btn {
+    width: 50px;
+    height: 50px;
+    background: #243246;
+    border: 1px solid rgba(212, 185, 106, 0.4);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .key-btn:hover { background: #2c3e55; border-color: #d4b96a; }
+  .key-btn:active { background: #d4b96a; }
+
+  footer { background: #1a2535; border-top: 2px solid #8a6f2e; padding: 14px 24px; margin-top: 10px; display: flex; justify-content: space-between; }
+  footer span { font-family: 'Source Code Pro', monospace; font-size: 9px; color: #5a6a7a; letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+
+<div class="emerg">EMERGENCY: 000 &nbsp;|&nbsp; NON-EMERGENCY: (000) 000-0000</div>
+
+<header>
+  <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+    <path d="M28 4 L46 10 L50 28 L28 52 L6 28 L10 10 Z" fill="none" stroke="#d4b96a" stroke-width="1.5"/>
+    <circle cx="28" cy="28" r="14" fill="none" stroke="#8a6f2e" stroke-width="1" stroke-dasharray="3 2"/>
+    <polygon points="28,10 30,19 39,19 32,24 34,33 28,28 22,33 24,24 17,19 26,19" fill="none" stroke="#d4b96a" stroke-width="1.2"/>
+    <circle cx="28" cy="28" r="3" fill="#d4b96a" opacity="0.7"/>
+  </svg>
+  <div>
+    <div class="hd-name">Solis Creek Police Department</div>
+    <div class="hd-sub">City of Solis Creek · San Joaquin Valley, California</div>
+    <div class="hd-motto">"Protecting Our Community, Upholding the Peace"</div>
+  </div>
+</header>
+
+<nav>
+  <a href="sun.html">Home</a>
+  <a href="moon.html">About</a>
+  <a href="eclipse.html" class="active">Contact Us</a>
+  <a href="corona.html" class="nav-db">[ Login ]</a>
+</nav>
+
+<div class="page">
+  <div>
+    <div class="page-title">
+      <h1>Contact Directory</h1>
+    </div>
+
+    <div class="section">
+      <h2>General Inquiries</h2>
+      <p><strong>Main Station Address:</strong><br>810 Halcyon Drive<br>Solis Creek, CA 95340</p>
+      <p><strong>Operating Hours:</strong><br>Lobby is open Monday through Friday, 8:00 AM to 5:00 PM. Patrol operations function 24/7.</p>
+      <p><strong>Phone Directory:</strong><br>
+        Non-Emergency Dispatch: (000) 000-0000<br>
+        Records Division: (000) 000-0001<br>
+        Evidence Room: (000) 000-0002<br>        Vine St. Inquiry Line: <em>disconnected</em>
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <div class="section" style="padding: 16px;">
+      <h2>Secure Area Access</h2>
+      <p style="font-size: 11px;">Restricted physical access portal. Authorized personnel only.</p>
+      
+      <div class="secure-entry-panel">
+        <div class="secure-entry-title">Service Keypad</div>
+        <div class="keypad-grid">
+          <button class="key-btn" onclick="pressKey(1)"></button>
+          <button class="key-btn" onclick="pressKey(2)"></button>
+          <button class="key-btn" onclick="pressKey(3)"></button>
+          <button class="key-btn" onclick="pressKey(4)"></button>
+          <button class="key-btn" onclick="pressKey(5)"></button>
+          <button class="key-btn" onclick="pressKey(6)"></button>
+          <button class="key-btn" onclick="pressKey(7)"></button>
+          <button class="key-btn" onclick="pressKey(8)"></button>
+          <button class="key-btn" onclick="pressKey(9)"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 SOLIS CREEK POLICE DEPARTMENT</span>
+  <span>LAST UPDATED: ██/██/████</span>
+</footer>
+
+<script>
+  // Sequence matches the clue from homepage slide 3: "7 · 2 · 9 · 4"
+  const secretSequence = [7, 2, 9, 4];
+  let currentInput = [];
+
+  function pressKey(val) {
+    currentInput.push(val);
+    
+    // Check if the input matches the secret sequence so far
+    for (let i = 0; i < currentInput.length; i++) {
+      if (currentInput[i] !== secretSequence[i]) {
+        // Mistake made, silently reset the sequence
+        currentInput = []; 
+        return;
+      }
+    }
+    
+    // If the full correct sequence is entered
+    if (currentInput.length === secretSequence.length) {
+      window.location.href = "bakery.html"; 
+    }
+  }
+</script>
+<script src="interaction-tracking.js" data-track-page="contact"></script>
+<script src="evil-mode.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Solis Creek PD — Database Login</title>
+<title>Solis Creek PD — ☀ Corona Access</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,10 +29,9 @@
   .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4caf50; animation: blink 2s infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  /* Helper Overlay Styles */
   .helper-wrapper {
     position: fixed;
-    bottom: -350px;
+    bottom: -300px;
     right: 30px;
     display: flex;
     flex-direction: column;
@@ -40,39 +39,34 @@
     transition: bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 1000;
   }
-  .helper-wrapper.active { bottom: 20px; }
-  
+  .helper-wrapper.active { bottom: 30px; }
   .speech-bubble {
-    background: url('images/speechbubble.png') no-repeat center center;
-    background-size: 100% 100%;
-    padding: 30px 40px 60px 30px; 
+    background: white;
+    border: 3px solid #1a2535;
+    padding: 16px 20px;
+    border-radius: 12px 12px 0 12px;
     font-size: 14px;
     font-weight: 600;
-    font-family: "Comic Sans MS", "Comic Sans", cursive; 
-    color: #333;
-    max-width: 260px;
-    min-height: 140px;
-    margin-bottom: -10px;
+    max-width: 250px;
+    margin-bottom: 12px;
     cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     user-select: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
     position: relative;
-    z-index: 2;
   }
-  
-  .helper-character {
-    width: 140px; 
-    height: auto;
-    z-index: 1;
-    pointer-events: none;
+  .speech-bubble::after {
+    content: "▼ Click to continue";
+    display: block;
+    font-size: 9px;
+    color: #888;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
-  
+  .helper-character { width: 120px; height: auto; }
   .back-btn {
     display: none;
-    margin-top: 10px;
+    margin-top: 15px;
     padding: 12px 24px;
     background: #b03a2e;
     color: white;
@@ -82,9 +76,34 @@
     font-weight: bold;
     text-transform: uppercase;
     border-radius: 4px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
   }
   .back-btn.show { display: inline-block; }
+  .return-sun-wrap {
+    display: none;
+    margin-top: 14px;
+  }
+  .return-sun-wrap.show {
+    display: block;
+  }
+  .return-sun-btn {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background: #1a2535;
+    color: #d4b96a;
+    text-decoration: none;
+    border: 1px solid #1a2535;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .return-sun-btn:hover { background: #243246; }
 </style>
 </head>
 <body>
@@ -94,7 +113,7 @@
     <img class="card-emblem" src="images/soliscreekpolicelogo.png" width="54" height="54" alt="Department emblem">
     <div>
       <div class="dept-name">Solis Creek Police Dept.</div>
-      <div class="dept-sub">Records &amp; Data Division — Secure Access</div>
+      <div class="dept-sub">Records &amp; Data Division — You Were Here Before</div>
     </div>
   </div>
 
@@ -110,6 +129,9 @@
     </div>
     <div id="error-msg" class="error-msg">ACCESS DENIED — Invalid credentials</div>
     <button class="login-btn" id="login-btn">Log In</button>
+    <div class="return-sun-wrap" id="return-sun-wrap">
+      <a href="sun.html" class="return-sun-btn">Return to Sun</a>
+    </div>
   </div>
 
   <div class="card-footer">
@@ -119,11 +141,9 @@
 </div>
 
 <div class="helper-wrapper" id="helper">
-  <div class="speech-bubble" onclick="advanceDialogue()">
-    <span id="helper-bubble-text">Uh oh! Looks like you don't have the right credentials.</span>
-  </div>
-  <img src="images/sunny-base.gif" class="helper-character" id="sunny-sprite" alt="Sunny the Helper">
-  <a href="sun.html" class="back-btn" id="helper-back">Back to Homepage</a>
+  <div class="speech-bubble" id="helper-bubble" onclick="advanceDialogue()">Uh oh! Looks like you don't have the right credentials.</div>
+  <img src="images/sunny-base.gif" class="helper-character" id="sunny-sprite" alt="Sunny">
+  <a class="back-btn" id="helper-back">Back to Homepage</a>
 </div>
 
 <script>
@@ -131,6 +151,7 @@
     document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US',{hour12:false});
   }, 1000);
 
+  // Normal helper dialogue (failed login)
   const dialogueLines = [
     "Uh oh! Looks like you don't have the right credentials.",
     "This database is highly restricted. Only authorized personnel are allowed!",
@@ -146,19 +167,22 @@
   function advanceDialogue() {
     dialogueIndex++;
     if (dialogueIndex < dialogueLines.length) {
-      document.getElementById('helper-bubble-text').innerHTML = dialogueLines[dialogueIndex];
+      document.getElementById('helper-bubble').innerHTML = dialogueLines[dialogueIndex];
     } else {
-      document.querySelector('.speech-bubble').style.display = 'none';
-      document.getElementById('helper-back').classList.add('show');
-      // Optional: Swap Sunny to an idle frame when talking is done
-      // document.getElementById('sunny-sprite').src = "images/sunny-idle1.png"; 
+      document.getElementById('helper-bubble').style.display = 'none';
+      const backBtn = document.getElementById('helper-back');
+      backBtn.classList.add('show');
+      backBtn.onclick = function(e) {
+        e.preventDefault();
+        window.location.href = 'sun.html';
+      };
     }
   }
 
+  // ── Sinister State ────────────────────────────────────────────────────
   const urlState = new URLSearchParams(location.search).get('state');
 
   if (urlState === 'sinister') {
-    // Post-ARG page alterations
     document.body.style.background = '#0a0a0a';
     document.querySelector('.card').style.borderColor = '#2a0a0a';
     document.querySelector('.card').style.boxShadow = '0 0 40px rgba(176,58,46,0.3)';
@@ -169,17 +193,20 @@
     document.querySelector('.login-btn').style.background = '#3a0a0a';
     document.querySelector('.login-btn').style.color = '#b03a2e';
     document.getElementById('username').placeholder = "it doesn't matter";
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('password').placeholder = '';
+    document.getElementById('return-sun-wrap').classList.add('show');
     const emblem = document.querySelector('.card-emblem');
     if (emblem) emblem.style.filter = 'hue-rotate(180deg) saturate(3) brightness(0.5)';
 
-    // Trigger evil Sunny after a short delay
     setTimeout(() => {
       document.getElementById('helper').classList.add('active');
       startEvilDialogue();
     }, 1800);
   }
 
-  // Evil Sunny dialogue sequence for sinister state
+  // Evil Sunny dialogue
   const evilDialogueLines = [
     "You found it.",
     "The file. The truth underneath the flyer.",
@@ -195,20 +222,21 @@
   let evilDone = false;
 
   function startEvilDialogue() {
-    const bubble = document.querySelector('.speech-bubble');
+    const bubble = document.getElementById('helper-bubble');
     const sprite = document.getElementById('sunny-sprite');
     const backBtn = document.getElementById('helper-back');
 
     sprite.src = 'images/sunny-evil.gif';
     sprite.style.filter = '';
+    bubble.style.borderColor = '#b03a2e';
     bubble.style.color = '#b03a2e';
     bubble.style.cursor = 'pointer';
-    document.getElementById('helper-bubble-text').textContent = evilDialogueLines[0];
+    bubble.textContent = evilDialogueLines[0];
 
     bubble.onclick = function () {
       evilDialogueIndex++;
       if (evilDialogueIndex < evilDialogueLines.length) {
-        document.getElementById('helper-bubble-text').textContent = evilDialogueLines[evilDialogueIndex];
+        bubble.textContent = evilDialogueLines[evilDialogueIndex];
       } else if (!evilDone) {
         evilDone = true;
         bubble.style.display = 'none';
@@ -217,10 +245,16 @@
         backBtn.style.background = '#1a0505';
         backBtn.style.color = '#b03a2e';
         backBtn.style.border = '1px solid #b03a2e';
+        backBtn.onclick = function(e) {
+          e.preventDefault();
+          localStorage.setItem('scpd_knows', '1');
+          window.location.href = 'sun.html';
+        };
       }
     };
   }
 </script>
-<script src="login-api.js"></script>
+<!--<script src="login-api.js"></script>-->
+<!--<script src="evil-mode.js"></script>-->
 </body>
 </html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solis Creek Police Department — ☀</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f0f0ee;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 400;
+    color: #222;
+    min-height: 100vh;
+  }
+
+  /* Emergency bar */
+  .emerg {
+    background: #b03a2e;
+    text-align: center;
+    padding: 7px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: white;
+  }
+
+  /* Header */
+  header {
+    background: #1a2535;
+    border-bottom: 3px solid #8a6f2e;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  header svg { width: 52px; height: 52px; flex-shrink: 0; }
+
+  .hd-name {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #d4b96a;
+    text-transform: uppercase;
+  }
+  .hd-sub {
+    font-size: 10px;
+    color: #7a8a9a;
+    letter-spacing: 0.1em;
+    margin-top: 3px;
+  }
+  .hd-motto {
+    font-size: 11px;
+    font-style: italic;
+    font-weight: 300;
+    color: #8a6f2e;
+    margin-top: 4px;
+  }
+
+  /* Nav */
+  nav {
+    background: #243246;
+    border-bottom: 1px solid #8a6f2e;
+    display: flex;
+  }
+
+  nav a {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8a9ab0;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-right: 1px solid rgba(138,111,46,0.2);
+    transition: color 0.15s, background 0.15s;
+  }
+
+  nav a:hover, nav a.active { color: #d4b96a; background: rgba(212,185,106,0.06); }
+  nav a:first-child { border-left: 1px solid rgba(138,111,46,0.2); }
+
+  .nav-db {
+    margin-left: auto;
+    font-family: 'Source Code Pro', monospace !important;
+    font-size: 10px !important;
+    color: #8a6f2e !important;
+  }
+
+  /* Page layout */
+  .page {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
+  }
+
+  /* Slideshow */
+  .slideshow {
+    position: relative;
+    overflow: hidden;
+    background: #1a2535;
+    border: 1px solid #ccc;
+    height: 180px;
+    margin-bottom: 22px;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.7s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .slide.active { opacity: 1; }
+
+  .slide h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #d4b96a;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+  .slide p { font-size: 12px; color: #7a8a9a; }
+  .slide.slide-2 h2 { color: #e07060; font-size: 14px; }
+  .slide.slide-3 h2 { color: #6aad80; }
+
+  .slide-3-hidden {
+    position: absolute;
+    bottom: 8px; right: 12px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    color: rgba(106,173,128,0.15);
+    letter-spacing: 0.2em;
+    user-select: all;
+  }
+
+  .slide-arrows {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    padding: 0 8px;
+  }
+
+  .arr {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid #8a6f2e;
+    color: #d4b96a;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    pointer-events: all;
+    font-size: 15px;
+    transition: background 0.15s;
+  }
+  .arr:hover { background: rgba(0,0,0,0.65); }
+
+  .dots {
+    position: absolute;
+    bottom: 8px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 5px;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(212,185,106,0.3);
+    border: 1px solid #8a6f2e;
+    cursor: pointer;
+  }
+  .dot.active { background: #d4b96a; }
+
+  /* Section label */
+  .sec-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a6f2e;
+    border-bottom: 1px solid #d8d4cc;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+  }
+
+  /* News items */
+  .news {
+    background: white;
+    border: 1px solid #ddd;
+    border-left: 3px solid #8a6f2e;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+  }
+
+  .news-date {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9px;
+    color: #aaa;
+    letter-spacing: 0.08em;
+  }
+
+  .news-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #222;
+    margin: 3px 0 4px;
+  }
+
+  .news-body { font-size: 12px; color: #555; line-height: 1.6; }
+
+  /* Sidebar */
+  .sidebar-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-top: 3px solid #8a6f2e;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+
+  .sidebar-card h3 {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #8a6f2e;
+    margin-bottom: 10px;
+  }
+
+  /* Bakery ad */
+  .bakery {
+    border: 1px dashed #c9a84c;
+    background: #fffdf5;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    transition: background 0.15s;
+  }
+  .bakery:hover { background: #fff8e0; }
+  .bakery-name { font-size: 16px; font-weight: 600; color: #5a3e1b; }
+  .bakery-tag { font-size: 10px; font-style: italic; color: #a08030; margin: 3px 0 8px; }
+  .bakery-hr { border: none; border-top: 1px solid #d4b96a; margin: 8px 0; }
+  .bakery-body { font-size: 11px; color: #5a4a2a; line-height: 1.7; }
+
+  .ql {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid #eee;
+    text-decoration: none;
+    font-size: 12px;
+    color: #333;
+    transition: color 0.15s;
+  }
+  .ql:last-child { border-bottom: none; }
+  .ql:hover { color: #8a6f2e; }
+  .ql::before { content: '›'; font-size: 14px; color: #8a6f2e; }
+
+  .contact-block { font-size: 12px; line-height: 1.9; color: #444; }
+
+  /* Footer */
+  footer {
+    background: #1a2535;
+    border-top: 2px solid #8a6f2e;
+    padding: 14px 24px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  footer span {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 9px;
+    color: #5a6a7a;
+    letter-spacing: 0.08em;
+  }
+
+</style>
+</head>
+<body>
+
+  <div class="emerg">EMERGENCY: 000 &nbsp;|&nbsp; NON-EMERGENCY: (000) 000-0000</div>
+
+<header>
+  <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+    <path d="M28 4 L46 10 L50 28 L28 52 L6 28 L10 10 Z" fill="none" stroke="#d4b96a" stroke-width="1.5"/>
+    <circle cx="28" cy="28" r="14" fill="none" stroke="#8a6f2e" stroke-width="1" stroke-dasharray="3 2"/>
+    <polygon points="28,10 30,19 39,19 32,24 34,33 28,28 22,33 24,24 17,19 26,19" fill="none" stroke="#d4b96a" stroke-width="1.2"/>
+    <circle cx="28" cy="28" r="3" fill="#d4b96a" opacity="0.7"/>
+  </svg>
+  <div class="hd-text">
+    <div class="hd-name">Solis Creek Police Department</div>
+    <div class="hd-sub">City of Solis Creek · San Joaquin Valley, California</div>
+    <div class="hd-motto">"Protecting Our Community, Upholding the Peace"</div>
+  </div>
+</header>
+
+<nav>
+  <a href="sun.html" class="active">Home</a>
+  <a href="moon.html">About</a>
+  <a href="eclipse.html">Contact Us</a>
+  <a href="corona.html" class="nav-db">[ Login ]</a>
+</nav>
+
+<div class="page">
+  <div>
+    <!-- Slideshow -->
+    <div class="slideshow" id="ss">
+      <div class="slide slide-1 active">
+        <div><h2>Serving Solis Creek Since 1947</h2><p>Dedicated officers. A safer community.</p></div>
+      </div>
+      <div class="slide slide-2">
+        <div><h2>⚠ Community Safety Update</h2><p>Report suspicious activity to the non-emergency line. Together we keep our neighborhoods safe.</p></div>
+      </div>
+      <div class="slide slide-3">
+        <div><h2>Annual Department Report — Now Available</h2><p>Review our 2024 transparency report in the database portal.</p></div>
+        <div class="slide-3-hidden" id="slide3-clue">7 · 2 · 9 · 4</div>
+      </div>
+      <div class="slide-arrows">
+        <div class="arr" onclick="changeSlide(-1)">&#8249;</div>
+        <div class="arr" onclick="changeSlide(1)">&#8250;</div>
+      </div>
+      <div class="dots">
+        <div class="dot active" onclick="goTo(0)"></div>
+        <div class="dot" onclick="goTo(1)"></div>
+        <div class="dot" onclick="goTo(2)"></div>
+      </div>
+    </div>
+
+    <div class="sec-label">Department News &amp; Announcements</div>
+
+    <div class="news">
+      <div class="news-date">APR 28, 2026</div>
+      <div class="news-title">SCPD Welcomes Four New Officers to the Force</div>
+      <div class="news-body">The department is pleased to announce the addition of four officers following completion of academy training. A formal swearing-in was held at City Hall on April 26th.</div>
+    </div>
+
+    <div class="news">
+      <div class="news-date">APR 14, 2026</div>
+      <div class="news-title">Community Town Hall — May 12th</div>
+      <div class="news-body">Chief R. Harlow invites all residents to attend our quarterly community meeting. Topics include recent crime statistics and the new neighborhood watch program.</div>
+    </div>
+
+    <div class="news">
+      <div class="news-date">MAR 30, 2026</div>
+      <div class="news-title">Road Closure: Vine St. Corridor — Ongoing Investigation</div>
+      <div class="news-body">The 400 block of Vine Street remains closed as part of an active investigation. Residents are asked to use alternate routes. Do not look at the sky near Vine Street.</div>
+    </div>
+
+    <div class="news">
+      <div class="news-date">MAR 09, 2026</div>
+      <div class="news-title">SCPD Records Division — Planned Maintenance</div>
+      <div class="news-body">The department records database will undergo scheduled maintenance. <em>Some personnel may experience access issues.</em> Contact the records office directly if needed.</div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div>
+    <div class="sidebar-card">
+      <h3>Community Partner</h3>
+      <a href="bakery.html" class="bakery">
+        <div class="bakery-name">GOLDEN RISE BAKERY</div>
+        <div class="bakery-tag">"Fresh from the oven, every morning."</div>
+        <hr class="bakery-hr">
+        <div class="bakery-body">Artisan breads · Pastries · Custom cakes<br><strong>122 Sycamore Ave, Solis Creek</strong><br>Serving our community for over 30 years</div>
+      </a>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>Quick Links</h3>
+      <a href="#" class="ql">File a Police Report</a>
+      <a href="#" class="ql">Sex Offender Registry</a>
+      <a href="#" class="ql">Crime Statistics &amp; Maps</a>
+      <a href="#" class="ql">Victim Services</a>
+      <a href="corona.html" class="ql" style="color:#8a6f2e">Personnel Database Access</a>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>Contact</h3>
+      <div class="contact-block">
+        <strong>Main Station</strong><br>
+        810 Halcyon Drive<br>
+        Solis Creek, CA 95340<br><br>
+        Mon–Fri: 8:00 AM – 5:00 PM<br>
+        Records: 9:00 AM – 4:00 PM
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 SOLIS CREEK POLICE DEPARTMENT</span>
+  <span>LAST UPDATED: ██/██/████</span>
+</footer>
+
+<script>
+  let cur = 0;
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  let timer;
+
+  function goTo(n) {
+    slides[cur].classList.remove('active'); dots[cur].classList.remove('active');
+    cur = (n + slides.length) % slides.length;
+    slides[cur].classList.add('active'); dots[cur].classList.add('active');
+  }
+  function changeSlide(d) { clearInterval(timer); goTo(cur + d); startTimer(); }
+  function startTimer() { timer = setInterval(() => goTo(cur + 1), 5000); }
+  startTimer();
+</script>
+<script src="interaction-tracking.js" data-track-page="homepage"></script>
+<script src="evil-mode.js"></script>
+</body>
+</html>
