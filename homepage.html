@@ -143,6 +143,15 @@
     user-select: all;
   }
 
+  .slide-4-keypad-hint {
+    max-width: 100%;
+    max-height: 156px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
   .slide-arrows {
     position: absolute;
     top: 50%; transform: translateY(-50%);
@@ -324,6 +333,9 @@
         <div><h2>Annual Department Report — Now Available</h2><p>Review our 2024 transparency report in the database portal.</p></div>
         <div class="slide-3-hidden" id="slide3-clue">7 · 2 · 9 · 4</div>
       </div>
+      <div class="slide slide-4">
+        <img class="slide-4-keypad-hint" src="images/keypadhint.png" alt="Keypad reference">
+      </div>
       <div class="slide-arrows">
         <div class="arr" onclick="changeSlide(-1)">&#8249;</div>
         <div class="arr" onclick="changeSlide(1)">&#8250;</div>
@@ -332,6 +344,7 @@
         <div class="dot active" onclick="goTo(0)"></div>
         <div class="dot" onclick="goTo(1)"></div>
         <div class="dot" onclick="goTo(2)"></div>
+        <div class="dot" onclick="goTo(3)"></div>
       </div>
     </div>
 
