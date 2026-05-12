@@ -12,6 +12,11 @@ app.use(express.json());
 // Serve static frontend files (login.html, homepage.html, etc.)
 app.use(express.static(__dirname));
 
+// Open login.html when visiting "/"
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'login.html'));
+});
+
 // Simple health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
