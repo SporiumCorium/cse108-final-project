@@ -155,11 +155,70 @@
     }
   }
 
-  if (new URLSearchParams(location.search).get('state') === 'sinister') {
-    document.body.style.background = '#111';
-    document.querySelector('.card').style.borderColor = '#333';
-    document.querySelector('.form-title').textContent = 'Access Revoked';
-    document.querySelector('.dept-sub').textContent = 'no one will ever believe you';
+  const urlState = new URLSearchParams(location.search).get('state');
+
+  if (urlState === 'sinister') {
+    // Post-ARG page alterations
+    document.body.style.background = '#0a0a0a';
+    document.querySelector('.card').style.borderColor = '#2a0a0a';
+    document.querySelector('.card').style.boxShadow = '0 0 40px rgba(176,58,46,0.3)';
+    document.querySelector('.form-title').textContent = 'Nobody will believe you.';
+    document.querySelector('.dept-sub').textContent = 'what you saw cannot be unseen';
+    document.querySelector('.dept-name').style.color = '#b03a2e';
+    document.querySelector('.status-dot').style.background = '#b03a2e';
+    document.querySelector('.login-btn').style.background = '#3a0a0a';
+    document.querySelector('.login-btn').style.color = '#b03a2e';
+    document.getElementById('username').placeholder = "it doesn't matter";
+    const emblem = document.querySelector('.card-emblem');
+    if (emblem) emblem.style.filter = 'hue-rotate(180deg) saturate(3) brightness(0.5)';
+
+    // Trigger evil Sunny after a short delay
+    setTimeout(() => {
+      document.getElementById('helper').classList.add('active');
+      startEvilDialogue();
+    }, 1800);
+  }
+
+  // Evil Sunny dialogue sequence for sinister state
+  const evilDialogueLines = [
+    "You found it.",
+    "The file. The truth underneath the flyer.",
+    "Now you know what's in the basement.",
+    "You know what they did on Vine Street.",
+    "Go ahead. Tell someone.",
+    "Nobody will believe you.",
+    "They never do.",
+    "Welcome back to the department website.",
+    "Have a nice day. :)"
+  ];
+  let evilDialogueIndex = 0;
+  let evilDone = false;
+
+  function startEvilDialogue() {
+    const bubble = document.querySelector('.speech-bubble');
+    const sprite = document.getElementById('sunny-sprite');
+    const backBtn = document.getElementById('helper-back');
+
+    sprite.src = 'images/sunny-evil.gif';
+    sprite.style.filter = '';
+    bubble.style.color = '#b03a2e';
+    bubble.style.cursor = 'pointer';
+    document.getElementById('helper-bubble-text').textContent = evilDialogueLines[0];
+
+    bubble.onclick = function () {
+      evilDialogueIndex++;
+      if (evilDialogueIndex < evilDialogueLines.length) {
+        document.getElementById('helper-bubble-text').textContent = evilDialogueLines[evilDialogueIndex];
+      } else if (!evilDone) {
+        evilDone = true;
+        bubble.style.display = 'none';
+        backBtn.classList.add('show');
+        backBtn.textContent = 'Return to the Homepage';
+        backBtn.style.background = '#1a0505';
+        backBtn.style.color = '#b03a2e';
+        backBtn.style.border = '1px solid #b03a2e';
+      }
+    };
   }
 </script>
 <script src="login-api.js"></script>
