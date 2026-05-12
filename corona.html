@@ -104,6 +104,38 @@
     transition: background 0.15s, color 0.15s, border-color 0.15s;
   }
   .return-sun-btn:hover { background: #243246; }
+  .auth-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .auth-actions .login-btn {
+    margin-top: 0;
+  }
+  .register-btn {
+    width: 100%;
+    padding: 10px;
+    background: #fafafa;
+    color: #1a2535;
+    border: 1px solid #1a2535;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .register-btn:hover { background: #e8e8e8; }
+  .register-btn:disabled { opacity: 0.6; cursor: default; }
+  .form-note {
+    margin-top: 12px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+    color: #777;
+    line-height: 1.4;
+  }
 </style>
 </head>
 <body>
@@ -128,7 +160,11 @@
       <input type="password" id="password" placeholder="••••••••">
     </div>
     <div id="error-msg" class="error-msg">ACCESS DENIED — Invalid credentials</div>
-    <button class="login-btn" id="login-btn">Log In</button>
+    <div class="auth-actions">
+      <button class="login-btn" id="login-btn">Log In</button>
+      <button class="register-btn" id="register-btn">Register</button>
+    </div>
+    <div class="form-note">Register a new account, then log in to view other usernames in the records database.</div>
     <div class="return-sun-wrap" id="return-sun-wrap">
       <a href="sun.html" class="return-sun-btn">Return to Sun</a>
     </div>
@@ -254,7 +290,7 @@
     };
   }
 </script>
-<!--<script src="login-api.js"></script>-->
+<script src="corona-auth.js"></script>
 <!--<script src="evil-mode.js"></script>-->
 </body>
 </html>

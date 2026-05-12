@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solis Creek PD - User Directory</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f0f0ee;
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .card {
+    width: 100%;
+    max-width: 520px;
+    background: white;
+    border: 1px solid #ccc;
+  }
+  .card-header {
+    background: #1a2535;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .card-emblem {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+  }
+  .dept-name {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #d4b96a;
+  }
+  .dept-sub {
+    margin-top: 3px;
+    font-size: 10px;
+    color: #7a8a9a;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .card-body {
+    padding: 28px 24px;
+  }
+  .form-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  .session {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 16px;
+  }
+  .user-list {
+    list-style: none;
+    border: 1px solid #e0e0e0;
+  }
+  .user-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #e8e8e8;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 13px;
+    color: #222;
+  }
+  .user-list li:last-child { border-bottom: none; }
+  .user-id {
+    color: #999;
+    font-size: 11px;
+  }
+  .message {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12px;
+    color: #777;
+    padding: 12px 0;
+  }
+  .back-link {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 10px 14px;
+    background: #1a2535;
+    color: #d4b96a;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="card-header">
+    <img class="card-emblem" src="images/soliscreekpolicelogo.png" width="54" height="54" alt="Department emblem">
+    <div>
+      <div class="dept-name">Solis Creek Police Dept.</div>
+      <div class="dept-sub">Registered User Directory</div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-title">Other Database Users</div>
+    <div class="session" id="session">Signed in as loading...</div>
+    <div class="message" id="message">Loading usernames...</div>
+    <ul class="user-list" id="user-list"></ul>
+    <a class="back-link" href="corona.html">Back to Corona Login</a>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var userId = params.get('userId');
+    var username = params.get('username') || 'unknown';
+    var session = document.getElementById('session');
+    var message = document.getElementById('message');
+    var list = document.getElementById('user-list');
+
+    session.textContent = 'Signed in as ' + username;
+
+    if (!userId) {
+      message.textContent = 'No active login was found.';
+      return;
+    }
+
+    fetch('/api/users?userId=' + encodeURIComponent(userId))
+      .then(function (response) {
+        return response.json().catch(function () {
+          return {};
+        }).then(function (data) {
+          if (!response.ok || !data.success) {
+            throw new Error((data && data.message) || 'Could not load users.');
+          }
+          return data.users || [];
+        });
+      })
+      .then(function (users) {
+        list.innerHTML = '';
+        if (!users.length) {
+          message.textContent = 'No other registered users were found.';
+          return;
+        }
+
+        message.textContent = '';
+        users.forEach(function (user) {
+          var item = document.createElement('li');
+          var name = document.createElement('span');
+          var id = document.createElement('span');
+          name.textContent = user.username;
+          id.className = 'user-id';
+          id.textContent = 'ID ' + user.id;
+          item.appendChild(name);
+          item.appendChild(id);
+          list.appendChild(item);
+        });
+      })
+      .catch(function (error) {
+        message.textContent = error.message || 'Could not load users.';
+      });
+  })();
+</script>
+</body>
+</html>

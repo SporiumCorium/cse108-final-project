@@ -46,43 +46,35 @@ db.serialize(() => {
     }
   );
 
-  // Ensure exactly one authorized row (remove old seeds / extra accounts).
+  // Ensure the original authorized row exists, while keeping registered users.
   db.get(
-    'SELECT id FROM users WHERE username = ? AND password = ?',
-    [SOLE_USERNAME, SOLE_PASSWORD],
-    (selErr, match) => {
+    'SELECT id FROM users WHERE username = ?',
+    [SOLE_USERNAME],
+    (selErr, row) => {
       if (selErr) {
         console.error('Error checking users table:', selErr);
         return;
       }
-      const afterTrim = (insertErr) => {
-        if (insertErr) {
-          console.error('Error seeding sole user:', insertErr);
-        } else {
-          console.log('Database user configured (single account).');
-        }
-      };
-      if (match) {
+      if (row) {
         db.run(
-          'DELETE FROM users WHERE username != ?',
-          [SOLE_USERNAME],
-          (delErr) => {
-            if (delErr) console.error('Error removing extra users:', delErr);
+          'UPDATE users SET password = ? WHERE username = ?',
+          [SOLE_PASSWORD, SOLE_USERNAME],
+          (updateErr) => {
+            if (updateErr) console.error('Error updating seeded user:', updateErr);
+            else console.log('Seeded database user verified.');
           }
         );
         return;
       }
-      db.run('DELETE FROM users', (delErr) => {
-        if (delErr) {
-          console.error('Error clearing users table:', delErr);
-          return;
+
+      db.run(
+        'INSERT INTO users (username, password) VALUES (?, ?)',
+        [SOLE_USERNAME, SOLE_PASSWORD],
+        (insertErr) => {
+          if (insertErr) console.error('Error seeding user:', insertErr);
+          else console.log('Seeded database user created.');
         }
-        db.run(
-          'INSERT INTO users (username, password) VALUES (?, ?)',
-          [SOLE_USERNAME, SOLE_PASSWORD],
-          afterTrim
-        );
-      });
+      );
     }
   );
 });

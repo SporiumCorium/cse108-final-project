@@ -62,6 +62,85 @@ app.post('/api/login', (req, res) => {
   );
 });
 
+// Registration endpoint for the Corona access page.
+app.post('/api/register', (req, res) => {
+  const { username, password } = req.body || {};
+  const cleanUsername = typeof username === 'string' ? username.trim() : '';
+  const cleanPassword = typeof password === 'string' ? password.trim() : '';
+
+  if (!cleanUsername || !cleanPassword) {
+    return res.status(400).json({
+      success: false,
+      message: 'Username and password are required.'
+    });
+  }
+
+  if (cleanUsername.length < 3 || cleanPassword.length < 4) {
+    return res.status(400).json({
+      success: false,
+      message: 'Username must be 3+ characters and password must be 4+ characters.'
+    });
+  }
+
+  db.run(
+    'INSERT INTO users (username, password) VALUES (?, ?)',
+    [cleanUsername, cleanPassword],
+    function (err) {
+      if (err) {
+        if (err.code === 'SQLITE_CONSTRAINT') {
+          return res.status(409).json({
+            success: false,
+            message: 'That username is already registered.'
+          });
+        }
+
+        console.error('Error registering user:', err);
+        return res.status(500).json({
+          success: false,
+          message: 'Internal server error.'
+        });
+      }
+
+      return res.status(201).json({
+        success: true,
+        userId: this.lastID,
+        username: cleanUsername
+      });
+    }
+  );
+});
+
+// Return usernames for every user except the logged-in user.
+app.get('/api/users', (req, res) => {
+  const currentUserId = Number.parseInt(req.query.userId, 10);
+
+  if (!Number.isInteger(currentUserId)) {
+    return res.status(400).json({
+      success: false,
+      message: 'A valid userId is required.'
+    });
+  }
+
+  db.all(
+    'SELECT id, username FROM users WHERE id != ? ORDER BY username COLLATE NOCASE',
+    [currentUserId],
+    (err, rows) => {
+      if (err) {
+        console.error('Error querying users table:', err);
+        return res.status(500).json({
+          success: false,
+          message: 'Internal server error.'
+        });
+      }
+
+      return res.json({
+        success: true,
+        users: rows
+      });
+    }
+  );
+});
+
 // Generic event tracking endpoint
 app.post('/api/events', (req, res) => {
   const { userId, eventType, payload } = req.body || {};
