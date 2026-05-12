@@ -37,6 +37,7 @@
       .catch(function (error) {
         err.textContent = error.message || 'Login failed. Please try again.';
         err.classList.add('show');
+        if (window.triggerHelper) window.triggerHelper();
       })
       .finally(function () {
         btn.textContent = 'Log In';

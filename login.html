@@ -7,151 +7,94 @@
 <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: #f0f0ee;
-    font-family: 'IBM Plex Sans', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-
-  .card {
-    background: white;
-    border: 1px solid #ccc;
-    width: 100%;
-    max-width: 380px;
-  }
-
-  .card-header {
-    background: #1a2535;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    text-align: center;
-  }
-
-  .card-header .card-emblem {
-    width: 54px;
-    height: 54px;
-    object-fit: contain;
-    display: block;
-  }
-
-  .dept-name {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #d4b96a;
-  }
-
-  .dept-sub {
-    font-size: 10px;
-    color: #7a8a9a;
-    letter-spacing: 0.06em;
-    margin-top: 2px;
-  }
-
+  body { background: #f0f0ee; font-family: 'IBM Plex Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow: hidden; }
+  .card { background: white; border: 1px solid #ccc; width: 100%; max-width: 380px; z-index: 10; }
+  .card-header { background: #1a2535; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+  .card-header .card-emblem { width: 54px; height: 54px; object-fit: contain; display: block; }
+  .dept-name { font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #d4b96a; }
+  .dept-sub { font-size: 10px; color: #7a8a9a; letter-spacing: 0.06em; margin-top: 2px; }
   .card-body { padding: 28px 24px; }
-
-  .form-title {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #555;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e8e8e8;
-  }
-
+  .form-title { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #555; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #e8e8e8; }
   .field { margin-bottom: 14px; }
-
-  label {
-    display: block;
-    font-size: 11px;
-    font-weight: 600;
-    color: #555;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-  }
-
-  input[type="text"], input[type="password"] {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1px solid #bbb;
-    background: #fafafa;
-    font-family: 'Source Code Pro', monospace;
-    font-size: 13px;
-    color: #222;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-
+  label { display: block; font-size: 11px; font-weight: 600; color: #555; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 5px; }
+  input[type="text"], input[type="password"] { width: 100%; padding: 9px 12px; border: 1px solid #bbb; background: #fafafa; font-family: 'Source Code Pro', monospace; font-size: 13px; color: #222; outline: none; transition: border-color 0.15s; }
   input:focus { border-color: #1a2535; background: white; }
-
-  .login-btn {
-    width: 100%;
-    margin-top: 18px;
-    padding: 10px;
-    background: #1a2535;
-    color: #d4b96a;
-    border: none;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-
+  .login-btn { width: 100%; margin-top: 18px; padding: 10px; background: #1a2535; color: #d4b96a; border: none; font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; transition: background 0.15s; }
   .login-btn:hover { background: #243246; }
   .login-btn:disabled { opacity: 0.6; cursor: default; }
-
-  .error-msg {
-    font-family: 'Source Code Pro', monospace;
-    font-size: 11px;
-    color: #b03a2e;
-    margin-top: 10px;
-    min-height: 16px;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
+  .error-msg { font-family: 'Source Code Pro', monospace; font-size: 11px; color: #b03a2e; margin-top: 10px; min-height: 16px; opacity: 0; transition: opacity 0.2s; }
   .error-msg.show { opacity: 1; }
-
-  .card-footer {
-    border-top: 1px solid #e8e8e8;
-    padding: 9px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #fafafa;
-  }
-
-  .status-text {
-    font-family: 'Source Code Pro', monospace;
-    font-size: 9px;
-    color: #aaa;
-  }
-
-  .status-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: #4caf50;
-    animation: blink 2s infinite;
-  }
-
+  .card-footer { border-top: 1px solid #e8e8e8; padding: 9px 24px; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
+  .status-text { font-family: 'Source Code Pro', monospace; font-size: 9px; color: #aaa; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4caf50; animation: blink 2s infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-
+  /* Helper Overlay Styles */
+  .helper-wrapper {
+    position: fixed;
+    bottom: -300px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    transition: bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+  }
+  .helper-wrapper.active {
+    bottom: 30px;
+  }
+  .speech-bubble {
+    background: white;
+    border: 3px solid #1a2535;
+    padding: 16px 20px;
+    border-radius: 12px 12px 0 12px;
+    font-size: 14px;
+    font-weight: 600;
+    max-width: 250px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    user-select: none;
+    position: relative;
+  }
+  .speech-bubble::after {
+    content: "▼ Click to continue";
+    display: block;
+    font-size: 9px;
+    color: #888;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .helper-character {
+    width: 80px;
+    height: 80px;
+    background: #d4b96a;
+    border-radius: 50%;
+    border: 4px solid #1a2535;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 36px;
+    color: #1a2535;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  .back-btn {
+    display: none;
+    margin-top: 15px;
+    padding: 12px 24px;
+    background: #b03a2e;
+    color: white;
+    text-decoration: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  .back-btn.show { display: inline-block; }
 </style>
 </head>
 <body>
@@ -185,26 +128,43 @@
   </div>
 </div>
 
+<div class="helper-wrapper" id="helper">
+  <div class="speech-bubble" id="helper-bubble" onclick="advanceDialogue()">Uh oh! Looks like you don't have the right credentials.</div>
+  <div class="helper-character">?</div>
+  <a href="homepage.html" class="back-btn" id="helper-back">Back to Homepage</a>
+</div>
+
 <script>
+  // Standard Clock
   setInterval(() => {
     document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US',{hour12:false});
   }, 1000);
 
-  function attemptLogin() {
-    const u = document.getElementById('username').value.trim();
-    const p = document.getElementById('password').value.trim();
-    const err = document.getElementById('error-msg');
-    const btn = document.getElementById('login-btn');
-    if (!u || !p) { err.textContent = 'Please fill in all fields.'; err.classList.add('show'); return; }
-    btn.textContent = 'Verifying...'; btn.disabled = true;
-    setTimeout(() => {
-      btn.textContent = 'Log In'; btn.disabled = false;
-      err.textContent = 'ACCESS DENIED — Invalid credentials';
-      err.classList.add('show');
-    }, 1100);
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Enter') attemptLogin(); });
+  // Helper Dialogue Logic
+  const dialogueLines = [
+    "Uh oh! Looks like you don't have the right credentials.",
+    "This database is highly restricted. Only authorized personnel are allowed!",
+    "If you lost your login, maybe the public pages have some clues hidden around...",
+    "Try heading back to the Homepage or the About page."
+  ];
+  let dialogueIndex = 0;
 
+  // This will be called by login-api.js when a login fails
+  window.triggerHelper = function() {
+    document.getElementById('helper').classList.add('active');
+  };
+
+  function advanceDialogue() {
+    dialogueIndex++;
+    if (dialogueIndex < dialogueLines.length) {
+      document.getElementById('helper-bubble').innerHTML = dialogueLines[dialogueIndex];
+    } else {
+      document.getElementById('helper-bubble').style.display = 'none';
+      document.getElementById('helper-back').classList.add('show');
+    }
+  }
+
+  // Sinister State Override
   if (new URLSearchParams(location.search).get('state') === 'sinister') {
     document.body.style.background = '#111';
     document.querySelector('.card').style.borderColor = '#333';

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Golden Rise Bakery</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  body { 
+    background: #111; 
+    font-family: 'IBM Plex Sans', sans-serif; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    margin: 0; 
+  }
+  
+  .puzzle-container { 
+    position: relative; 
+    width: 500px; 
+    height: 700px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+  }
+  
+  /* The "Ominous" layer underneath (Z-index 1) */
+  .ominous-layer {
+    position: absolute; 
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #0a0a0a; 
+    color: #b03a2e;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    font-family: 'Source Code Pro', monospace; 
+    text-align: center; 
+    z-index: 1; 
+    padding: 40px;
+  }
+  .ominous-layer h1 { font-size: 28px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 20px; }
+  .ominous-layer p { font-size: 14px; margin-bottom: 40px; color: #7a4040; line-height: 1.6; }
+  .credentials { border: 1px solid #b03a2e; padding: 24px; font-size: 16px; color: #d4b96a; background: rgba(176, 58, 46, 0.1); }
+  .credentials span { display: block; margin-bottom: 10px; }
+  
+  /* The Fake Flyer covering it (Z-index 2) */
+  .flyer-layer {
+    position: absolute; 
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #fffdf5;
+    z-index: 2; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    text-align: center; 
+    padding: 40px; 
+    border: 12px solid #c9a84c;
+  }
+  .flyer-layer h1 { font-size: 48px; color: #5a3e1b; margin-bottom: 10px; font-family: 'Georgia', serif; }
+  .flyer-layer h3 { font-size: 18px; color: #a08030; font-style: italic; margin-bottom: 40px; }
+  .flyer-layer p { font-size: 16px; color: #5a4a2a; line-height: 1.6; max-width: 350px; }
+  .flyer-layer .deal { background: #c9a84c; color: white; padding: 15px 30px; font-size: 20px; font-weight: bold; border-radius: 4px; margin-top: 40px; }
+  
+  /* Instruction text hidden below the container */
+  .meta-hint {
+    position: absolute;
+    bottom: -40px;
+    width: 100%;
+    text-align: center;
+    color: #444;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="puzzle-container">
+  <div class="ominous-layer">
+    <h1>They are hiding the truth</h1>
+    <p>Do not trust the public logs. You need administrative database access to see the unredacted files.</p>
+    <div class="credentials">
+      <span><strong>DB_USER:</strong> Calloway7895621</span>
+      <span><strong>DB_PASS:</strong> L3V1SD135</span>
+    </div>
+  </div>
+
+  <div class="flyer-layer" id="bakery-flyer">
+    <h1>Golden Rise Bakery</h1>
+    <h3>Fresh from the oven, every morning.</h3>
+    <p>Join us this weekend for our annual Sourdough Festival! Enjoy free samples, baking demonstrations, and 20% off all artisan loaves.</p>
+    <div class="deal">Buy 1 Get 1 Free Pastries!</div>
+  </div>
+  
+  <div class="meta-hint">Something is hiding behind this element. Check your Developer Tools.</div>
+</div>
+
+<script src="interaction-tracking.js" data-track-page="bakery"></script>
+</body>
+</html>
